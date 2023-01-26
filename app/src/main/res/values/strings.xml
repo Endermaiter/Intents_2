@@ -1,3 +1,4 @@
 <resources>
     <string name="app_name">Intents 2</string>
+    <string name="menor"><![CDATA[>]]></string>
 </resources>
