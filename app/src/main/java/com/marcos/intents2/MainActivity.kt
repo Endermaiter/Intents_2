@@ -14,9 +14,11 @@ import java.util.*
 
 class MainActivity : AppCompatActivity() {
 
+    //RESULTS
     val RESULT_CAMERA = 1
     val RESULT_ACTIVITY = 2
 
+    //Numeros random generados con el metodo randomNumber()
     val firstRandomNumber = randomNumber()
     val secondRandomNumber = randomNumber()
 
@@ -34,14 +36,19 @@ class MainActivity : AppCompatActivity() {
         }
 
         buttonRandom.setOnClickListener {
+            //Creamos un intent que inicia la segunda activity cuando pulsamos el boton
             val intent = Intent(this, MainActivity2::class.java)
+
+            //introducimos los numeros random generados en el intent
             intent.putExtra("firstNumber", firstRandomNumber)
             intent.putExtra("secondNumber", secondRandomNumber)
+            //inicamos la activity con su respectivo result
             startActivityForResult(intent, RESULT_ACTIVITY)
         }
 
     }
 
+    //metodo para generar un numero random entre 0 y 9 (ambos incluidos)
     fun randomNumber(): Int {
         val numeroRandom = Random().nextInt(10)
         return numeroRandom
@@ -52,9 +59,13 @@ class MainActivity : AppCompatActivity() {
         super.onActivityResult(requestCode, resultCode, data)
         val imageView = findViewById<ImageView>(R.id.imageView)
         val resultText = findViewById<TextView>(R.id.resultText)
+        //si requestCode es distinto de -1
         if (requestCode != Activity.RESULT_OK) {
+            //"switch" en funcion del request code recibido por el método
             when (requestCode) {
+                //si requestCode = 1 (CAMARA)
                 RESULT_CAMERA -> {
+                    //si data no es null...
                     if (data != null) {
                         //recogemos la imagen tomada en una variable de tipo Bitmap
                         val imageBitmap = data.extras!!.get("data") as Bitmap
@@ -62,11 +73,16 @@ class MainActivity : AppCompatActivity() {
                         imageView.setImageBitmap(imageBitmap)
                     };
                 }
+                //si requestCode = 2 (resultado de la MainActivity2)
                 RESULT_ACTIVITY -> {
+                    //si data no es null...
                     if (data != null) {
+                        //recogemos el dato (el resultado) enviado por la MainActivity2
                         val resultString = data.getStringExtra("result")
+                        //sumamos los valores para posteriormente compararlo con el resultado proporcionado por el usuario
                         val suma = firstRandomNumber + secondRandomNumber
                         Log.d("CHECK", "RESULTADO 1AC = $resultString")
+                        //comprobamos si la suma de los numeros es igual al resultado dado por el usuario
                         if (suma.toString()==resultString) {
                             resultText.text = "Resultado: ¡CORRECTO!"
                         } else {
